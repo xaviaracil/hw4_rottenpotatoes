@@ -23,6 +23,12 @@ describe MoviesController do
       response.should render_template('same_director')
     end
     
-    it 'should make the search results to that template'
+    it 'should make the search results to that template' do
+      fake_movies = [FactoryGirl.build(:movie),FactoryGirl.build(:movie),FactoryGirl.build(:movie)]
+      Movie.stub(:find).and_return(@movie)
+      @movie.stub(:find_with_same_director).and_return(fake_movies)
+      post :same_director, {:id => @movie.id}
+      assigns(:movies).should == fake_movies
+    end
   end
 end
