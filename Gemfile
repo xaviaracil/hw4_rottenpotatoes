@@ -17,6 +17,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'simplecov'
   gem 'ZenTest'
+  gem 'factory_girl_rails'
 end
 group :production do
   gem 'pg'
