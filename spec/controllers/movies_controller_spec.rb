@@ -11,7 +11,17 @@ describe MoviesController do
 
       post :same_director, {:id => movie.id}
     end
-    it 'should select the similar movies template for rendering'
+    
+    it 'should select the similar movies template for rendering' do
+      movie = FactoryGirl.build(:movie)
+      
+      Movie.stub(:find).and_return(movie)
+      movie.stub(:find_with_same_director)
+      
+      post :same_director, {:id => movie.id}
+      response.should render_template('same_director')
+    end
+    
     it 'should make the search results to that template'
   end
 end
