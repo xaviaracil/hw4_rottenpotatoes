@@ -4,6 +4,6 @@ FactoryGirl.define do
     director 'George Lucas'
     rating 'PG'
     release_date { 10.years.ago }
-    id 123    
+    id "123"
   end
 end
