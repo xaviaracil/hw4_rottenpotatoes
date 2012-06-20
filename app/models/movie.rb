@@ -4,6 +4,6 @@ class Movie < ActiveRecord::Base
   end
   
   def find_with_same_director
-    Movie.find_all_by_director :conditions => {:director => director}
+    Movie.find_all_by_director director
   end
 end

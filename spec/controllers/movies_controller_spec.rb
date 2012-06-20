@@ -25,8 +25,12 @@ describe MoviesController do
         response.should render_template('same_director')
       end
     
-      it 'should make the search results to that template' do
+      it 'should make the search results available to that template' do
         assigns(:movies).should == @fake_movies
+      end
+      
+      it 'should make the movie available to that template' do
+        assigns(:movie).should == @movie
       end
     end
     

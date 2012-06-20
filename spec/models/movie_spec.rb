@@ -6,7 +6,7 @@ describe Movie do
       @movie = FactoryGirl.build(:movie)
     end
     it 'should call find method on Movie class with director' do
-      Movie.should_receive(:find_all_by_director).with(hash_including :conditions => hash_including(:director => 'George Lucas'))
+      Movie.should_receive(:find_all_by_director).with('George Lucas')
       @movie.find_with_same_director
     end
     it 'should return an empty array if movie hasn\'t any director' do
