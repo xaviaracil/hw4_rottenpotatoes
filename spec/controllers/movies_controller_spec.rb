@@ -35,21 +35,26 @@ describe MoviesController do
     end
     
     describe 'find movies with empty director' do
-      it 'should ask the model method if it has a director' do
+      before :each do
         Movie.stub(:find).and_return(@movie)
-        @movie.should_receive(:director?)
-        @movie.should_not_receive(:find_with_same_director)
+        @movie.should_receive(:director?).and_return(false)
+      end
+      it 'should ask the model method if it has a director' do
         get :same_director, {:id => @movie.id}
       end
       
       it 'should not call model method that search movies with same director' do
-        Movie.stub(:find).and_return(@movie)
-        @movie.stub(:director?).and_return(false)
         @movie.should_not_receive(:find_with_same_director)
         get :same_director, {:id => @movie.id}
       end
-      it 'should redirect to the home page'
-      it 'should make a message available to that template'
+      it 'should redirect to the home page' do
+        get :same_director, {:id => @movie.id}
+        response.should redirect_to(movies_path)
+      end
+      it 'should make a message available to that action' do
+        get :same_director, {:id => @movie.id}
+        flash[:warning].should == "'#{@movie.title}' has no director info"
+      end
     end    
   end
 end
