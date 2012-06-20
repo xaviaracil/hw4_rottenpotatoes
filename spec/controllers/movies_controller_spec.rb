@@ -11,7 +11,7 @@ describe MoviesController do
       Movie.should_receive(:find).with(@movie.id.to_s).and_return(@movie)
       @movie.should_receive(:find_with_same_director)
 
-      post :same_director, {:id => @movie.id}
+      get :same_director, {:id => @movie.id}
     end
     
     describe 'find movies with valid director' do
@@ -19,7 +19,7 @@ describe MoviesController do
         Movie.stub(:find).and_return(@movie)
         @fake_movies = [FactoryGirl.build(:movie),FactoryGirl.build(:movie),FactoryGirl.build(:movie)]
         @movie.stub(:find_with_same_director).and_return(@fake_movies)
-        post :same_director, {:id => @movie.id}
+        get :same_director, {:id => @movie.id}
       end
       it 'should select the similar movies template for rendering' do
         response.should render_template('same_director')
@@ -34,5 +34,22 @@ describe MoviesController do
       end
     end
     
+    describe 'find movies with empty director' do
+      it 'should ask the model method if it has a director' do
+        Movie.stub(:find).and_return(@movie)
+        @movie.should_receive(:director?)
+        @movie.should_not_receive(:find_with_same_director)
+        get :same_director, {:id => @movie.id}
+      end
+      
+      it 'should not call model method that search movies with same director' do
+        Movie.stub(:find).and_return(@movie)
+        @movie.stub(:director?).and_return(false)
+        @movie.should_not_receive(:find_with_same_director)
+        get :same_director, {:id => @movie.id}
+      end
+      it 'should redirect to the home page'
+      it 'should make a message available to that template'
+    end    
   end
 end
