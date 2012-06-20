@@ -14,21 +14,21 @@ describe MoviesController do
       post :same_director, {:id => @movie.id}
     end
     
-    it 'should select the similar movies template for rendering' do
-      
-      Movie.stub(:find).and_return(@movie)
-      @movie.stub(:find_with_same_director)
-      
-      post :same_director, {:id => @movie.id}
-      response.should render_template('same_director')
+    describe 'find movies with valid director' do
+      before :each do
+        Movie.stub(:find).and_return(@movie)
+        @fake_movies = [FactoryGirl.build(:movie),FactoryGirl.build(:movie),FactoryGirl.build(:movie)]
+        @movie.stub(:find_with_same_director).and_return(@fake_movies)
+        post :same_director, {:id => @movie.id}
+      end
+      it 'should select the similar movies template for rendering' do
+        response.should render_template('same_director')
+      end
+    
+      it 'should make the search results to that template' do
+        assigns(:movies).should == @fake_movies
+      end
     end
     
-    it 'should make the search results to that template' do
-      fake_movies = [FactoryGirl.build(:movie),FactoryGirl.build(:movie),FactoryGirl.build(:movie)]
-      Movie.stub(:find).and_return(@movie)
-      @movie.stub(:find_with_same_director).and_return(fake_movies)
-      post :same_director, {:id => @movie.id}
-      assigns(:movies).should == fake_movies
-    end
   end
 end
